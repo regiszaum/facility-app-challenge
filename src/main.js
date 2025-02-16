@@ -1,3 +1,4 @@
+import './assets/styles/reset.styl';
 import './assets/styles/global.styl';
 import { createApp } from 'vue'
 import App from './App.vue'
