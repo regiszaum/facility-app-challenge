@@ -22,5 +22,5 @@ import Navbar from './components/molecules/Navbar.vue';
   width 100%
 .content
   flex 1
-  background #f0f8ff
+  background #E9F4FB
 </style>

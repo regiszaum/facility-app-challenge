@@ -70,30 +70,39 @@ import { useRouter } from 'vue-router';
       margin-top 14px
     nav
       width 100%
-    nav ul
-      list-style none
-      padding 0
-      width 100%
+      ul
+        list-style none
+        padding 0
+        width 100%
+        li
+          border-top: solid 1px #46a3ff
+          width 100%
+          display flex
+          flex-direction column
+          align-items center
+          font-size 12px
+          font-weight bold
+          cursor pointer
+          text-decoration none
+          color #fff
+          span
+            margin 10px 0 17px 0
+          .nav-icon
+            margin-top 10px
+          &:last-child
+            border-bottom solid 1px #46a3ff
+          .router-link-active
+            background-color #1182F2
+        a
+          width 100%
+          display flex
+          flex-direction column
+          align-items center
+          font-size 12px
+          font-weight bold
+          cursor pointer
+          text-decoration none
+          color #fff
 
-    nav li
-      border-top: solid 1px #46a3ff
-      span
-        margin 10px 0 17px 0
-      .nav-icon
-        margin-top 10px
-      &:last-child
-        border-bottom solid 1px #46a3ff
-    nav li, nav a
-      width 100%
-      display flex
-      flex-direction column
-      align-items center
-      font-size 12px
-      font-weight bold
-      cursor pointer
-      text-decoration none
-      color #fff
-li > .router-link-active, li > router-link-exact-active
-  background-color #1182F2
 </style>
   
