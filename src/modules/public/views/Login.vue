@@ -13,10 +13,11 @@ import LoginForm from '../components/molecules/LoginForm.vue';
 <style lang="stylus" scoped>
 .login-container
   display flex
-  height 100vh
+  height 100dvh
   flex-direction row
 
 @media (max-width: 768px)
   .login-container
     flex-direction column
+    width 100%
 </style>

@@ -1,23 +1,23 @@
 <template>
-    <div class="login-box">
-      <form @submit.prevent="doLogin">
-        <h2>Entre com seus dados de acesso.</h2>
-        <InputComponent
-          label="Nome de usuário ou e-mail:"
-          type="text"
-          v-model="username"
-          class="user-input"
-        />
-        <InputComponent
-          label="Senha:"
-          type="password"
-          v-model="password"
-          class="password-input"
-        />
-        <button class="login-button" type="submit">Entrar</button>
-        <router-link to="/forgot-password" class="forgot-password">Esqueci minha senha</router-link>
-      </form>
-    </div>
+  <div class="login-box">
+    <form @submit.prevent="doLogin">
+      <h2>Entre com seus dados de acesso.</h2>
+      <InputComponent
+        label="Nome de usuário ou e-mail:"
+        type="text"
+        v-model="username"
+        class="user-input"
+      />
+      <InputComponent
+        label="Senha:"
+        type="password"
+        v-model="password"
+        class="password-input"
+      />
+      <button class="login-button" type="submit">Entrar</button>
+      <router-link to="/forgot-password" class="forgot-password">Esqueci minha senha</router-link>
+    </form>
+  </div>
 </template>
   
 <script setup>
@@ -68,7 +68,7 @@ const store = useStore();
     font-weight bold
     color #283848
   .login-button
-    width 388px
+    width 100%
     background-color #1ad18f
     color white
     border none
@@ -93,12 +93,21 @@ const store = useStore();
       font-weight bold
   .user-input
     margin-bottom 22px
+    width 100%
+    display flex
   .password-input
     margin-bottom 18px
+    display flex
+    width 100%
 
   @media (max-width: 768px)
     .login-box
       width 100%
-      height 60vh
+      flex 1
+      form
+        width 100%
+        padding 20px
+        .forgot-password
+          font-size 15px
 </style>
   

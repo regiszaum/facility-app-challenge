@@ -33,6 +33,24 @@
 @media (max-width: 768px)
   .left-section
     width 100%
-    height 40vh
+    height 200px
+    background-color #2693FF
+    display flex
+    justify-content center
+    align-items center
+    color white
+    img
+      width 80px
+      margin-bottom 0px
+    .page-title
+      font-size 40px
+      margin-bottom 0px
+      strong
+        font-weight bold
+      span
+        font-weight 300
+    .page-subtitle
+      font-size 15px
+      color #fff
 </style>
   

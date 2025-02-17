@@ -9,7 +9,7 @@
         class="user-input"
       />
       <button class="email-button" type="submit">Recuperar</button>
-      <router-link to="/" class="forgot-password">Voltar para login</router-link>
+      <router-link to="/" class="login-route">Voltar para login</router-link>
     </form>
   </div>
 </template>
@@ -61,7 +61,7 @@ const store = useStore();
     font-weight bold
     color #283848
   .email-button
-    width 388px
+    width 100%
     background-color #1ad18f
     color white
     border none
@@ -75,7 +75,7 @@ const store = useStore();
     margin-bottom 42px
     &:hover
       background-color darken(#1ad18f, 10%)
-  .forgot-password
+  .login-route
     display block
     text-align start
     color #007bff
@@ -92,6 +92,8 @@ const store = useStore();
 @media (max-width: 768px)
   .fp-box
     width 100%
-    height 60vh
+    flex 1
+  .login-route
+    font-size 15px
 </style>
   
