@@ -20,7 +20,6 @@ export default createStore({
   mutations: {
     SET_AUTHENTICATED(state, value) {
       state.authenticated = value;
-      console.log('Authenticated:', state.authenticated); // Verifique se está sendo atualizado
       localStorage.setItem('userStore', JSON.stringify(state));
     },
   },

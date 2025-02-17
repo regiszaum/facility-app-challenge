@@ -40,7 +40,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useToast } from '@/composables/useToast';
 
-const username = ref('admin@facilitaapp.com');
+const username = ref('user@facilitaapp.com');
 const password = ref('12345');
 const router = useRouter();
 const store = useStore();

@@ -94,6 +94,9 @@ const toast = useToast();
   .fp-box
     width 100%
     flex 1
+    form
+      width 100%
+      padding 20px
   .login-route
     font-size 15px
 </style>
