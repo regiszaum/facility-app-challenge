@@ -40,7 +40,7 @@ const store = useStore();
     try {
       const success = await store.dispatch('login', credentials);
       if (success) {
-        router.push({ path: '/dashboard' });
+        router.push({ path: '/account' });
       } else {
         alert('Credenciais inválidas');
       }

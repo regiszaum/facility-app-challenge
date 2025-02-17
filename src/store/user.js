@@ -9,8 +9,8 @@ const loadState = () => {
   return {
     authenticated: false,
     users: [
-      { email: 'admin@facilitaapp.com', password: '12345', name: 'Administrador', role: 'Admin' },
-      { email: 'user@facilitaapp.com', password: '12345', name: 'Eduardo Pereira da Costa', role: 'Usuário' },
+      { email: 'admin@facilitaapp.com', password: '12345', name: 'Administrador', role_label: 'Admin', role: 'adm' },
+      { email: 'user@facilitaapp.com', password: '12345', name: 'Eduardo Pereira da Costa', role_label: 'Front-end Developer', role: 'user' },
     ],
   };
 };

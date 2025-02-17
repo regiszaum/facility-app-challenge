@@ -11,19 +11,19 @@ export default {
       type: {
         type: String,
         default: 'text',
-    },
+      },
       label: {
         type: String,
         default: '',
-    },
-    id: {
+      },
+      id: {
         type: String,
         default: () => `input-${Math.random().toString(36).substr(2, 9)}`,
-    },
-    modelValue: {
+      },
+      modelValue: {
         type: String,
         default: '',
-    },
+      },
     },
     emits: ['update:modelValue'],
   };
