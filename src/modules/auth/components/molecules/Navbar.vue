@@ -44,14 +44,17 @@
 import IconComponent from '@/components/atoms/IconComponent.vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-  
-  const store = useStore();
-  const router = useRouter();
-  
-  const logout = () => {
-    store.dispatch('logout');
-    router.push({ name: 'LoginView' });
-  };
+import { useToast } from '@/composables/useToast';
+
+const store = useStore();
+const router = useRouter();
+const toast = useToast();
+
+const logout = () => {
+  store.dispatch('logout');
+  router.push({ name: 'LoginView' });
+  toast("Logout feito com sucesso!", "success");
+};
 </script>
   
 <style lang="stylus" scoped>

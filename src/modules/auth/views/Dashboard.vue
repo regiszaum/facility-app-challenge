@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <div class="header">
-      <h1>Bem-vindo, Usuário!</h1>
+      <h1>Bem-vindo, {{ userName }}!</h1>
       <p class="clock">{{ time }}</p>
     </div>
     <div class="cards-container">
@@ -26,8 +26,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const user = computed(() => store.state.users.find(u => u.email === 'user@facilitaapp.com'));
+
+const userName = computed(() => user.value?.name || 'Usuário');
 const time = ref(new Date().toLocaleTimeString());
 
 const updateTime = () => {
@@ -52,7 +57,7 @@ onMounted(() => {
 .header
   margin-bottom 20px
   h1
-    text-align start
+    text-align center
     color #283848
     font-size 26px
     font-weight bold
