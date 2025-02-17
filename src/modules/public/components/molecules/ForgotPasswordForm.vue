@@ -19,27 +19,28 @@ import InputComponent from '@/components/atoms/InputComponent.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { useToast } from '@/composables/useToast';
 
 const username = ref('admin@facilitaapp.com');
 const router = useRouter();
 const store = useStore();
-  
+const toast = useToast();
+
   const sendEmailToken = async () => {
     const credentials = {
       email: username.value,
-      password: password.value,
     };
   
     try {
-      const success = await store.dispatch('login', credentials);
+      const success = await store.dispatch('forgot', credentials);
       if (success) {
-        router.push({ path: '/dashboard' });
+        toast("Um e-mail foi enviado para você!", "success");
+        router.push({ path: '/' });
       } else {
-        alert('Credenciais inválidas');
+        toast("E-mail não registrado. Tente novamente!", "error");
       }
     } catch (error) {
-      console.error('Erro durante o login:', error);
-      alert('Ocorreu um erro durante o login. Tente novamente.');
+      toast("Aconteceu um erro! Contate o suporte.", "error");
     }
   };
 </script>

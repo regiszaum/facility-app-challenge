@@ -33,6 +33,12 @@ export default createStore({
       }
       return false;
     },
+    forgot({ state }, { email }) {
+      const user = state.users.find(u => u.email === email);
+      if (user) {
+        return true;
+      }
+    },
     logout({ commit }) {
       commit('SET_AUTHENTICATED', false);
       localStorage.removeItem('userStore');

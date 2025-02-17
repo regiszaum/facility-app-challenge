@@ -14,41 +14,62 @@
         v-model="password"
         class="password-input"
       />
-      <button class="login-button" type="submit">Entrar</button>
+      <button class="login-button" type="submit" :disabled="loading">
+      <span v-if="!loading">
+        Entrar
+      </span>
+      <span v-else class="loading-status">
+        <span class="loading-component">
+          <Loading height="5px" width="5px"/>
+        </span>
+        <span>
+          Carregando
+        </span>
+      </span>
+      </button>
       <router-link to="/forgot-password" class="forgot-password">Esqueci minha senha</router-link>
     </form>
   </div>
 </template>
-  
+
 <script setup>
 import InputComponent from '@/components/atoms/InputComponent.vue';
+import Loading from '@/components/atoms/Loading.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { useToast } from '@/composables/useToast';
 
 const username = ref('admin@facilitaapp.com');
 const password = ref('12345');
 const router = useRouter();
 const store = useStore();
+const loading = ref(false);
+const toast = useToast();
+
+const doLogin = async () => {
+  loading.value = true;
   
-  const doLogin = async () => {
+  setTimeout(async () => {
     const credentials = {
       email: username.value,
       password: password.value,
     };
-  
+
     try {
       const success = await store.dispatch('login', credentials);
       if (success) {
         router.push({ path: '/account' });
       } else {
-        alert('Credenciais inválidas');
+        toast("Usuário/senha inválidos!", "error");
       }
     } catch (error) {
-      console.error('Erro durante o login:', error);
-      alert('Ocorreu um erro durante o login. Tente novamente.');
+      toast("Aconteceu um erro! Contate o suporte.", "error");
+    } finally {
+      loading.value = false;
     }
-  };
+  }, 2000);
+};
 </script>
   
 <style lang="stylus" scoped>
@@ -80,8 +101,21 @@ const store = useStore();
     cursor pointer
     border-radius 4px
     margin-bottom 42px
+    &:disabled
+      border 1px solid #999999
+      background-color #ccc
+      color #666
+      border none
+      cursor not-allowed
     &:hover
       background-color darken(#1ad18f, 10%)
+    &:hover:disabled
+      background-color #ccc
+    .loading-status
+      display flex
+      justify-content center
+      .loading-component
+        margin-right 5px
   .forgot-password
     display block
     text-align start
