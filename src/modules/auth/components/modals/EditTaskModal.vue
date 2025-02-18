@@ -46,7 +46,9 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import Modal from "@/components/molecules/Modal.vue";
 import InputComponent from "@/components/atoms/InputComponent.vue";
+import { useToast } from "@/composables/useToast";
 
+const toast = useToast();
 const store = useStore();
 const modalRef = ref(null);
 const task = ref({ id: null, title: "", description: "", tag: "other", status: "open" });
@@ -67,6 +69,7 @@ const updateTask = () => {
   if (!task.value.title.trim()) return;
 
   store.dispatch("tasks/editTask", task.value);
+  toast("Tarefa editada com sucesso!", "success");
   modalRef.value.close();
 };
 

@@ -107,9 +107,11 @@ const openDeleteTaskModal = (taskId, taskTitle) => {
 // 📌 Obtém todas as tarefas do Vuex Store
 const tasks = computed(() => store.state.tasks?.tasks ?? []);
 
-// 📌 Filtra tarefas por busca e categoria
+// 📌 Filtra tarefas por busca e categoria e ordena por prioridade
 const filteredTasks = computed(() => {
   if (!tasks.value.length) return [];
+
+  const priorityOrder = { urgent: 1, important: 2, other: 3 }; // ✅ Ordem de prioridade
 
   let filtered = tasks.value.filter((task) => {
     const search = searchTerm.value.toLowerCase();
@@ -127,7 +129,8 @@ const filteredTasks = computed(() => {
     );
   }
 
-  return filtered;
+  // 📌 Ordena por prioridade: Urgentes → Importantes → Outras
+  return filtered.sort((a, b) => priorityOrder[a.tag] - priorityOrder[b.tag]);
 });
 
 // 📌 Alternar status da tarefa

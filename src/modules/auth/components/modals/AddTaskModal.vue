@@ -46,7 +46,9 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import Modal from "@/components/molecules/Modal.vue";
 import InputComponent from "@/components/atoms/InputComponent.vue";
+import { useToast } from "@/composables/useToast";
 
+const toast = useToast();
 const store = useStore();
 const modalRef = ref(null);
 
@@ -72,7 +74,7 @@ const createTask = () => {
     ...task.value, // 🔹 Mantém todos os valores de task corretamente
     status: "open",
   };
-
+  toast("Tarefa criada com sucesso!", "success");
   store.dispatch("tasks/addTask", newTask);
   modalRef.value.close();
 };
