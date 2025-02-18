@@ -14,6 +14,7 @@
       <TasksList :selectedCategory="selectedCategory" />
     </div>
   </div>
+  <AddTaskButton />
 </template>
 
 <script setup>
@@ -21,6 +22,7 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import TasksList from '../components/organisms/TasksList.vue';
 import Sidebar from '../components/organisms/Sidebar.vue';
+import AddTaskButton from '../components/molecules/AddTaskButton.vue';
 
 const store = useStore();
 
@@ -85,4 +87,8 @@ const openTasksCount = computed(() => {
   color #2693ff
 .underline
   text-decoration underline
+
+@media (max-width: 672px)
+  .sidebar
+    display none
 </style>

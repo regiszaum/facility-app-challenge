@@ -5,12 +5,10 @@
       <UserInfoHeader />
       <RouterView />
     </main>
-    <AddTaskButton />
   </div>
 </template>
 
 <script setup>
-import AddTaskButton from './components/molecules/AddTaskButton.vue';
 import UserInfoHeader from './components/atoms/UserInfoHeader.vue';
 import Navbar from './components/molecules/Navbar.vue';
 </script>

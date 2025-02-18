@@ -7,56 +7,54 @@
       <ul>
         <li>
           <router-link to="/account/dashboard">
-            <IconComponent name="chart-column" height="37px" class="nav-icon"/>
-            <span>
-              Dashboard
-            </span>
+            <IconComponent name="chart-column" height="37px" class="nav-icon" />
+            <span> Dashboard </span>
           </router-link>
         </li>
         <li>
           <router-link to="/account/tasks">
-            <IconComponent name="circle-check" :type="'far'" height="37px" class="nav-icon"/>
-            <span>
-              Tarefas
-            </span>
+            <IconComponent
+              name="circle-check"
+              :type="'far'"
+              height="37px"
+              class="nav-icon"
+            />
+            <span> Tarefas </span>
           </router-link>
         </li>
         <li>
           <router-link to="/account/settings">
-            <IconComponent name="gear" height="37px" class="nav-icon"/>
-            <span>
-              Configurações
-            </span>
+            <IconComponent name="gear" height="37px" class="nav-icon" />
+            <span> Configurações </span>
           </router-link>
         </li>
-        <li @click="logout"><IconComponent name="right-from-bracket" height="37px" class="nav-icon"/>
-        <span>
-          Sair
-        </span>
+        <li @click="logout">
+          <IconComponent name="right-from-bracket" height="37px" class="nav-icon" />
+          <span> Sair </span>
         </li>
       </ul>
     </nav>
     <div></div>
   </aside>
 </template>
-  
+
 <script setup>
-import IconComponent from '@/components/atoms/IconComponent.vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
-import { useToast } from '@/composables/useToast';
+import IconComponent from "@/components/atoms/IconComponent.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { useToast } from "@/composables/useToast";
 
 const store = useStore();
 const router = useRouter();
 const toast = useToast();
 
 const logout = () => {
-  store.dispatch('user/logout');
-  router.push({ name: 'LoginView' });
+  store.dispatch("user/logout");
+  router.push({ name: "LoginView" });
   toast("Logout feito com sucesso!", "success");
 };
 </script>
-  
+
 <style lang="stylus" scoped>
   .sidebar-menu
     width 106px
@@ -66,7 +64,7 @@ const logout = () => {
     flex-direction column
     align-items center
     justify-content space-between
-  
+
     .logo img
       width 50px
       height 50px
@@ -106,6 +104,7 @@ const logout = () => {
           cursor pointer
           text-decoration none
           color #fff
-
+@media (max-width: 672px)
+  .sidebar-menu
+    display none
 </style>
-  
