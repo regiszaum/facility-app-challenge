@@ -1,11 +1,21 @@
 <template>
-  <button class="floating-action-button">
+  <button class="floating-action-button" @click="openAddTaskModal">
     <IconComponent :name="'plus'" height="24px" />
   </button>
+  <AddTaskModal ref="addTaskModalRef" />
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import IconComponent from "@/components/atoms/IconComponent.vue";
+import AddTaskModal from '../modals/AddTaskModal.vue';
+
+const addTaskModalRef = ref(null);
+
+// 📌 Abre a modal de adicionar tarefa
+const openAddTaskModal = () => {
+  addTaskModalRef.value.open();
+};
 </script>
 <style lang="stylus" scoped>
 .floating-action-button

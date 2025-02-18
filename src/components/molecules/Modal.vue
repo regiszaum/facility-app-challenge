@@ -1,0 +1,99 @@
+<template>
+  <Teleport to="body">
+    <div v-if="isVisible" class="modal-overlay" @click="close">
+      <div class="modal-container" @click.stop>
+        <!-- Header -->
+        <div class="modal-header">
+          <h3>{{ header }}</h3>
+          <button class="close-button" @click="close">
+            <IconComponent :name="'xmark'" height="12px" color="#4E657B"/>
+          </button>
+        </div>
+
+        <!-- Corpo da Modal -->
+        <div class="modal-body">
+          <slot></slot>
+        </div>
+
+        <!-- Footer (Opcional) -->
+        <div v-if="footer" class="modal-footer">
+          <slot name="footer"></slot>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import IconComponent from "@/components/atoms/IconComponent.vue";
+const isVisible = ref(false);
+const header = ref("");
+const footer = ref(false);
+
+// 📌 Função para abrir a modal, permitindo passar título e se terá footer
+const open = (title = "Modal", hasFooter = false) => {
+  header.value = title;
+  footer.value = hasFooter;
+  isVisible.value = true;
+};
+
+// 📌 Função para fechar a modal
+const close = () => {
+  isVisible.value = false;
+};
+
+// 📌 Expõe os métodos para serem chamados externamente
+defineExpose({ open, close });
+</script>
+
+<style lang="stylus" scoped>
+.modal-overlay
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background rgba(0, 0, 0, 0.4)
+  display flex
+  justify-content center
+  align-items center
+  z-index 1000
+
+.modal-container
+  background white
+  width 400px
+  padding 40px
+  border-radius 10px
+  box-shadow 0 4px 10px rgba(0, 0, 0, 0.1)
+  overflow hidden
+  animation fadeIn 0.2s ease-in-out
+
+.modal-header
+  display flex
+  justify-content space-between
+  align-items center
+  font-weight bold
+  font-size 25px
+  color #283848
+
+.close-button
+  background none
+  border none
+  font-size 22px
+  cursor pointer
+  padding 0
+
+.modal-body
+  font-size 16px
+  color #555
+
+
+@keyframes fadeIn
+  from
+    opacity 0
+    transform scale(0.95)
+  to
+    opacity 1
+    transform scale(1)
+</style>

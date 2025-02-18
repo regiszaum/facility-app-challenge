@@ -25,7 +25,7 @@
           <div v-if="task.showMenu" class="dropdown-menu" @click.stop>
             <!-- Linha com botão de fechar e editar -->
             <div class="menu-header">
-              <button class="edit">
+              <button class="edit" @click="editTask(task)">
                 <IconComponent name="circle" :type="'fas'" height="9px" width="9px" color="#5ECDA5"/>
                 <span>Editar</span>
               </button>
@@ -35,7 +35,7 @@
             </div>
 
             <!-- Botão de excluir abaixo -->
-            <button class="delete">
+            <button class="delete" @click="openDeleteTaskModal(task.id, task.title)">
               <IconComponent name="circle" :type="'fas'" height="9px" width="9px" color="#D6E6EF"/>
               <span>Excluir</span>
             </button>
@@ -44,6 +44,8 @@
       </div>
     </div>
   </div>
+  <DeleteTaskModal ref="deleteTaskModalRef" />
+  <EditTaskModal ref="editTaskModalRef" />
 </template>
 
 <script setup>
@@ -51,6 +53,8 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import SearchInput from '../molecules/SearchInput.vue';
 import IconComponent from '@/components/atoms/IconComponent.vue';
+import DeleteTaskModal from '../modals/DeleteTaskModal.vue';
+import EditTaskModal from '../modals/EditTaskModal.vue';
 
 const props = defineProps({
   selectedCategory: String
@@ -58,6 +62,21 @@ const props = defineProps({
 
 const store = useStore();
 const searchTerm = ref('');
+const editTaskModalRef = ref(null);
+const deleteTaskModalRef = ref(null);
+
+// 📌 Abrir modal de edição
+const editTask = (task) => {
+  editTaskModalRef.value.open(task);
+};
+
+// 📌 Abre a modal de exclusão com os dados da tarefa
+const openDeleteTaskModal = (taskId, taskTitle) => {
+  console.log('abriu');
+  console.log(taskId, taskTitle);
+  deleteTaskModalRef.value.open(taskId, taskTitle);
+};
+
 
 // 📌 Obtém todas as tarefas do Vuex Store
 const tasks = computed(() => store.state.tasks?.tasks ?? []);

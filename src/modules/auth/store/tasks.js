@@ -26,11 +26,16 @@ const loadState = () => {
 
   return initialState;
 };
+
 export default {
   namespaced: true, // Permite chamar as actions como 'tasks/addTask'
   state: loadState(),
   mutations: {
     ADD_TASK(state, task) {
+      const taskIds = state.tasks.map(t => Number(t.id)).filter(id => !isNaN(id));
+      const maxId = taskIds.length > 0 ? Math.max(...taskIds) : 0;
+      task.id = maxId + 1;
+  
       state.tasks.push(task);
       localStorage.setItem('tasksStore', JSON.stringify(state));
     },
@@ -38,6 +43,17 @@ export default {
       const task = state.tasks.find(t => t.id === taskId);
       if (task) {
         task.status = task.status === 'open' ? 'closed' : 'open';
+        localStorage.setItem('tasksStore', JSON.stringify(state));
+      }
+    },
+    DELETE_TASK(state, taskId) {
+      state.tasks = state.tasks.filter(task => task.id !== taskId);
+      localStorage.setItem('tasksStore', JSON.stringify(state));
+    },
+    EDIT_TASK(state, updatedTask) { // 📌 Nova mutation para editar tarefa
+      const index = state.tasks.findIndex(t => t.id === updatedTask.id);
+      if (index !== -1) {
+        state.tasks[index] = updatedTask;
         localStorage.setItem('tasksStore', JSON.stringify(state));
       }
     }
@@ -48,6 +64,12 @@ export default {
     },
     toggleTaskStatus({ commit }, taskId) {
       commit('TOGGLE_TASK_STATUS', taskId);
+    },
+    deleteTask({ commit }, taskId) {
+      commit('DELETE_TASK', taskId);
+    },
+    editTask({ commit }, updatedTask) { // 📌 Nova action para editar tarefa
+      commit('EDIT_TASK', updatedTask);
     }
   },
   getters: {
