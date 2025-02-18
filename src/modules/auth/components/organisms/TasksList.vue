@@ -1,42 +1,69 @@
 <template>
-  <div class="tasks-component">
+  <div class="tasks-component" @click="closeAllMenus">
     <SearchInput class="search-component" v-model="searchTerm" />
-    
+
     <div class="task-list">
-      <div 
-        v-for="task in filteredTasks" 
-        :key="task.id" 
-        class="task" 
-        :class="{ completed: task.status === 'closed' }">
-        
-        <input type="checkbox" :checked="task.status === 'closed'" @change="toggleTaskStatus(task.id)" />
+      <div
+        v-for="task in filteredTasks"
+        :key="task.id"
+        class="task"
+        :class="{ completed: task.status === 'closed' }"
+        @click.stop
+      >
+        <input
+          type="checkbox"
+          :checked="task.status === 'closed'"
+          @change="toggleTaskStatus(task.id)"
+        />
 
         <span class="task-title">{{ task.title }}</span>
 
-        <!-- Verifica se a tag existe antes de formatar -->
-        <span v-if="task.tag" class="tag" :class="task.tag">{{ formatTag(task.tag) }}</span>
+        <span v-if="task.tag" class="tag" :class="task.tag">{{
+          formatTag(task.tag)
+        }}</span>
 
-        <!-- Botão de ações e dropdown -->
         <div class="actions">
           <button @click.stop="toggleMenu(task)" class="menu-button">
-            <IconComponent name="ellipsis-vertical" :type="'fas'" height="15px" width="3.2px" color="#5ECDA5"/>
+            <IconComponent
+              name="ellipsis-vertical"
+              :type="'fas'"
+              height="15px"
+              width="3.2px"
+              color="#5ECDA5"
+            />
           </button>
 
           <div v-if="task.showMenu" class="dropdown-menu" @click.stop>
-            <!-- Linha com botão de fechar e editar -->
             <div class="menu-header">
               <button class="edit" @click="editTask(task)">
-                <IconComponent name="circle" :type="'fas'" height="9px" width="9px" color="#5ECDA5"/>
+                <IconComponent
+                  name="circle"
+                  :type="'fas'"
+                  height="9px"
+                  width="9px"
+                  color="#5ECDA5"
+                />
                 <span>Editar</span>
               </button>
-              <button @click.stop="toggleMenu(task)" class="menu-close">
-                <IconComponent name="ellipsis-vertical" :type="'fas'" height="15px" width="3.2px" color="#2693ff"/>
+              <button @click.self="toggleMenu(task)" class="menu-close">
+                <IconComponent
+                  name="ellipsis-vertical"
+                  :type="'fas'"
+                  height="15px"
+                  width="3.2px"
+                  color="#2693ff"
+                />
               </button>
             </div>
 
-            <!-- Botão de excluir abaixo -->
             <button class="delete" @click="openDeleteTaskModal(task.id, task.title)">
-              <IconComponent name="circle" :type="'fas'" height="9px" width="9px" color="#D6E6EF"/>
+              <IconComponent
+                name="circle"
+                :type="'fas'"
+                height="9px"
+                width="9px"
+                color="#D6E6EF"
+              />
               <span>Excluir</span>
             </button>
           </div>
@@ -49,78 +76,81 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
-import SearchInput from '../molecules/SearchInput.vue';
-import IconComponent from '@/components/atoms/IconComponent.vue';
-import DeleteTaskModal from '../modals/DeleteTaskModal.vue';
-import EditTaskModal from '../modals/EditTaskModal.vue';
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import SearchInput from "../molecules/SearchInput.vue";
+import IconComponent from "@/components/atoms/IconComponent.vue";
+import DeleteTaskModal from "../modals/DeleteTaskModal.vue";
+import EditTaskModal from "../modals/EditTaskModal.vue";
 
 const props = defineProps({
-  selectedCategory: String
+  selectedCategory: String,
 });
 
 const store = useStore();
-const searchTerm = ref('');
+const searchTerm = ref("");
 const editTaskModalRef = ref(null);
 const deleteTaskModalRef = ref(null);
 
 // 📌 Abrir modal de edição
 const editTask = (task) => {
   editTaskModalRef.value.open(task);
+  closeAllMenus();
 };
 
-// 📌 Abre a modal de exclusão com os dados da tarefa
+// 📌 Abrir modal de exclusão
 const openDeleteTaskModal = (taskId, taskTitle) => {
-  console.log('abriu');
-  console.log(taskId, taskTitle);
   deleteTaskModalRef.value.open(taskId, taskTitle);
+  closeAllMenus();
 };
-
 
 // 📌 Obtém todas as tarefas do Vuex Store
 const tasks = computed(() => store.state.tasks?.tasks ?? []);
 
-// 📌 Ordena por prioridade: Urgent → Important → Other
-const sortByPriority = (tasksList) => {
-  const priorityOrder = { urgent: 1, important: 2, other: 3 };
-  return tasksList.sort((a, b) => priorityOrder[a.tag] - priorityOrder[b.tag]);
-};
-
-// 📌 Filtra tarefas por título, descrição e categoria selecionada
+// 📌 Filtra tarefas por busca e categoria
 const filteredTasks = computed(() => {
   if (!tasks.value.length) return [];
 
-  let filtered = tasks.value.filter(task => {
+  let filtered = tasks.value.filter((task) => {
     const search = searchTerm.value.toLowerCase();
-    return task.title.toLowerCase().includes(search) || task.description.toLowerCase().includes(search);
+    return (
+      task.title.toLowerCase().includes(search) ||
+      task.description.toLowerCase().includes(search)
+    );
   });
 
   if (props.selectedCategory !== "all") {
-    filtered = filtered.filter(task =>
+    filtered = filtered.filter((task) =>
       props.selectedCategory === "closed"
         ? task.status === "closed"
         : task.tag === props.selectedCategory
     );
   }
 
-  return sortByPriority(filtered);
+  return filtered;
 });
 
 // 📌 Alternar status da tarefa
 const toggleTaskStatus = (taskId) => {
-  store.dispatch('tasks/toggleTaskStatus', taskId);
+  store.dispatch("tasks/toggleTaskStatus", taskId);
 };
 
-// 📌 Exibir menu de ações individuais para cada tarefa
+// 📌 Alternar menu dropdown e fechar os outros
 const toggleMenu = (task) => {
-  task.showMenu = !task.showMenu;
+  tasks.value.forEach((t) => {
+    t.showMenu = t.id === task.id ? !t.showMenu : false;
+  });
 };
 
-// 📌 Função para formatar a tag de prioridade
+// 📌 Fechar todos os menus ao clicar fora
+const closeAllMenus = () => {
+  tasks.value.forEach((task) => (task.showMenu = false));
+};
+
+// 📌 Formatar tag de prioridade
 const formatTag = (tag) => {
-  const tags = { urgent: 'Urgente', important: 'Importante', other: 'Outras' };
-  return tags[tag] || 'Outras';
+  const tags = { urgent: "Urgente", important: "Importante", other: "Outras" };
+  return tags[tag] || "Outras";
 };
 </script>
 
@@ -143,14 +173,14 @@ const formatTag = (tag) => {
   display flex
   align-items center
   background white
-  padding 14.5px 14px
+  padding 12px 14px
   border-radius 8px
   justify-content space-between
   cursor pointer
   border 1px solid #e0e0e0
   transition all 0.3s ease
   position relative
-  height 64px
+  max-height 64px
   color #304458
 
   &:hover
@@ -229,7 +259,7 @@ input[type="checkbox"]
 
 .dropdown-menu
   position absolute
-  top -9px /* Garante que fique abaixo do botão */
+  top -9px
   right 0
   background white
   border 1px solid #ddd
