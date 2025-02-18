@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import SearchInput from "../molecules/SearchInput.vue";
 import IconComponent from "@/components/atoms/IconComponent.vue";
@@ -92,34 +92,47 @@ const searchTerm = ref("");
 const editTaskModalRef = ref(null);
 const deleteTaskModalRef = ref(null);
 
+// 📌 Fecha todos os menus ao clicar fora
+const closeAllMenus = () => {
+  tasks.value.forEach((task) => (task.showMenu = false));
+};
+
+// 📌 Detecta clique fora do componente
+const handleClickOutside = (event) => {
+  if (!event.target.closest(".task")) {
+    closeAllMenus();
+  }
+};
+
+// 📌 Escutando evento global de clique
+onMounted(() => {
+  window.addEventListener("click", handleClickOutside);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("click", handleClickOutside);
+});
+
 // 📌 Abrir modal de edição
 const editTask = (task) => {
+  closeAllMenus(); // ✅ Fecha dropdown ao abrir modal
   editTaskModalRef.value.open(task);
-  closeAllMenus();
 };
 
 // 📌 Abrir modal de exclusão
 const openDeleteTaskModal = (taskId, taskTitle) => {
+  closeAllMenus(); // ✅ Fecha dropdown ao abrir modal
   deleteTaskModalRef.value.open(taskId, taskTitle);
-  closeAllMenus();
 };
 
-// 📌 Obtém todas as tarefas do Vuex Store
+// 📌 Obtém e ordena as tarefas
 const tasks = computed(() => store.state.tasks?.tasks ?? []);
-
-// 📌 Filtra tarefas por busca e categoria e ordena por prioridade
 const filteredTasks = computed(() => {
-  if (!tasks.value.length) return [];
-
-  const priorityOrder = { urgent: 1, important: 2, other: 3 }; // ✅ Ordem de prioridade
-
-  let filtered = tasks.value.filter((task) => {
-    const search = searchTerm.value.toLowerCase();
-    return (
-      task.title.toLowerCase().includes(search) ||
-      task.description.toLowerCase().includes(search)
-    );
-  });
+  const priorityOrder = { urgent: 1, important: 2, other: 3 };
+  let filtered = tasks.value.filter((task) =>
+    [task.title, task.description].some((field) =>
+      field?.toLowerCase().includes(searchTerm.value.toLowerCase())
+    )
+  );
 
   if (props.selectedCategory !== "all") {
     filtered = filtered.filter((task) =>
@@ -128,26 +141,19 @@ const filteredTasks = computed(() => {
         : task.tag === props.selectedCategory
     );
   }
-
-  // 📌 Ordena por prioridade: Urgentes → Importantes → Outras
   return filtered.sort((a, b) => priorityOrder[a.tag] - priorityOrder[b.tag]);
 });
 
-// 📌 Alternar status da tarefa
+// 📌 Alternar status
 const toggleTaskStatus = (taskId) => {
   store.dispatch("tasks/toggleTaskStatus", taskId);
 };
 
-// 📌 Alternar menu dropdown e fechar os outros
+// 📌 Alternar dropdown individual
 const toggleMenu = (task) => {
   tasks.value.forEach((t) => {
     t.showMenu = t.id === task.id ? !t.showMenu : false;
   });
-};
-
-// 📌 Fechar todos os menus ao clicar fora
-const closeAllMenus = () => {
-  tasks.value.forEach((task) => (task.showMenu = false));
 };
 
 // 📌 Formatar tag de prioridade
