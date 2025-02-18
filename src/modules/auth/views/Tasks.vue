@@ -58,14 +58,15 @@ const openTasksCount = computed(() => {
   flex-shrink 0 /* Impede que ela diminua */
   overflow hidden /* Evita que ultrapasse os limites */
 .container-tasks
+
   flex-grow 1 /* Ocupa o espaço restante da tela */
   display flex
   flex-direction column
   justify-content center
   align-items start
-  padding 40px
+  padding 0px 40px 0px 40px
   max-width 800px
-  margin auto /* Centraliza no espaço disponível */
+  margin 0 auto auto auto
   h2
     font-size 26px
     font-weight bold

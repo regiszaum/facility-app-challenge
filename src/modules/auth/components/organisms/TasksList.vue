@@ -135,7 +135,7 @@ const formatTag = (tag) => {
   display flex
   flex-direction column
   gap 7px
-  max-height 400px
+  max-height 380px
   overflow-y auto
   width 100%
 
@@ -154,7 +154,7 @@ const formatTag = (tag) => {
   color #304458
 
   &:hover
-    box-shadow 0px 4px 10px rgba(0, 0, 0, 0.1)
+    box-shadow 0px 4px 0px rgba(0, 0, 0, 0.1)
 
   &.completed .task-title
     text-decoration line-through
