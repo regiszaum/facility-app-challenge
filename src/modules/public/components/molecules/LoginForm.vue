@@ -108,7 +108,7 @@ h2
   border-radius 4px
   margin-bottom 42px
   &:disabled
-    border 1px solid #999999
+    border none
     background-color #ccc
     color #666
     cursor not-allowed

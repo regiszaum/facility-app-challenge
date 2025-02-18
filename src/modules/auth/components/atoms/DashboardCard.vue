@@ -44,5 +44,5 @@ const taskCount = computed(() => props.count || 0);
   border-left 5px solid #28a745
 
 .other
-  border-left 5px solid #6c757d
+  border-left 5px solid #d3e5ff
 </style>
