@@ -37,3 +37,18 @@
 
 body
   font-family 'Gilroy', sans-serif
+*
+  --sb-track-color transparent
+  --sb-thumb-color #2693ff
+  --sb-size 1px
+
+*::-webkit-scrollbar
+  width var(--sb-size)
+
+*::-webkit-scrollbar-track
+  background var(--sb-track-color)
+  border-radius 3px
+
+*::-webkit-scrollbar-thumb
+  background var(--sb-thumb-color)
+  border-radius 3px
