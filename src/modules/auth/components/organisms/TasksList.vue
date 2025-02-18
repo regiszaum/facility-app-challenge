@@ -13,7 +13,34 @@
 
         <span class="task-title">{{ task.title }}</span>
 
-        <span class="tag" :class="task.tag">{{ formatTag(task.tag) }}</span>
+        <!-- Verifica se a tag existe antes de formatar -->
+        <span v-if="task.tag" class="tag" :class="task.tag">{{ formatTag(task.tag) }}</span>
+
+        <!-- Botão de ações e dropdown -->
+        <div class="actions">
+          <button @click.stop="toggleMenu(task)" class="menu-button">
+            <IconComponent name="ellipsis-vertical" :type="'fas'" height="15px" width="3.2px" color="#5ECDA5"/>
+          </button>
+
+          <div v-if="task.showMenu" class="dropdown-menu" @click.stop>
+            <!-- Linha com botão de fechar e editar -->
+            <div class="menu-header">
+              <button class="edit">
+                <IconComponent name="circle" :type="'fas'" height="9px" width="9px" color="#5ECDA5"/>
+                <span>Editar</span>
+              </button>
+              <button @click.stop="toggleMenu(task)" class="menu-close">
+                <IconComponent name="ellipsis-vertical" :type="'fas'" height="15px" width="3.2px" color="#2693ff"/>
+              </button>
+            </div>
+
+            <!-- Botão de excluir abaixo -->
+            <button class="delete">
+              <IconComponent name="circle" :type="'fas'" height="9px" width="9px" color="#D6E6EF"/>
+              <span>Excluir</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -23,9 +50,10 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import SearchInput from '../molecules/SearchInput.vue';
+import IconComponent from '@/components/atoms/IconComponent.vue';
 
 const props = defineProps({
-  selectedCategory: String // 📌 Filtro recebido da View Tasks.vue
+  selectedCategory: String
 });
 
 const store = useStore();
@@ -44,13 +72,11 @@ const sortByPriority = (tasksList) => {
 const filteredTasks = computed(() => {
   if (!tasks.value.length) return [];
 
-  // Filtra por busca
   let filtered = tasks.value.filter(task => {
     const search = searchTerm.value.toLowerCase();
     return task.title.toLowerCase().includes(search) || task.description.toLowerCase().includes(search);
   });
 
-  // 📌 Aplica filtro de categoria
   if (props.selectedCategory !== "all") {
     filtered = filtered.filter(task =>
       props.selectedCategory === "closed"
@@ -59,7 +85,6 @@ const filteredTasks = computed(() => {
     );
   }
 
-  // Retorna ordenado por prioridade
   return sortByPriority(filtered);
 });
 
@@ -68,13 +93,17 @@ const toggleTaskStatus = (taskId) => {
   store.dispatch('tasks/toggleTaskStatus', taskId);
 };
 
-// 📌 Formatar tag de prioridade
+// 📌 Exibir menu de ações individuais para cada tarefa
+const toggleMenu = (task) => {
+  task.showMenu = !task.showMenu;
+};
+
+// 📌 Função para formatar a tag de prioridade
 const formatTag = (tag) => {
   const tags = { urgent: 'Urgente', important: 'Importante', other: 'Outras' };
   return tags[tag] || 'Outras';
 };
 </script>
-
 
 <style lang="stylus" scoped>
 .tasks-component
@@ -95,7 +124,7 @@ const formatTag = (tag) => {
   display flex
   align-items center
   background white
-  padding 14.5px 14px 14.5px 14px
+  padding 14.5px 14px
   border-radius 8px
   justify-content space-between
   cursor pointer
@@ -164,7 +193,7 @@ input[type="checkbox"]
     background #d3e5ff
     color #0056b3
 
-// Estilização do menu de ações ⋮
+// 📌 Estilização do menu de ações ⋮
 .actions
   position relative
 
@@ -181,34 +210,60 @@ input[type="checkbox"]
 
 .dropdown-menu
   position absolute
-  top 0px
+  top -9px /* Garante que fique abaixo do botão */
   right 0
   background white
   border 1px solid #ddd
   border-radius 5px
   box-shadow 0px 4px 8px rgba(0, 0, 0, 0.1)
   padding 5px 0
-  min-width 120px
+  min-width 140px
   display flex
   flex-direction column
+  align-items flex-start
   z-index 10
 
-  button
-    padding 8px 10px
+  /* Botão de fechar e botão "Editar" na mesma linha */
+  .menu-header
+    display flex
+    align-items center
     width 100%
-    text-align left
-    border none
-    background none
-    cursor pointer
-    font-size 14px
-    color #333
+    justify-content space-between
 
-    &:hover
-      background #f5f5f5
+.menu-close
+  background none
+  border none
+  cursor pointer
+  padding 5px
+  display flex
+  align-items center
+  justify-content end
+  font-size 14px
+  font-weight bold
+  color #2693ff
+  transition color 0.2s ease
 
-  .edit
-    color #28a745
+  &:hover
+    color #2693ff
 
-  .delete
-    color #007bff
+/* Botões do menu */
+button
+  display flex
+  align-items center
+  gap 8px
+  padding 8px 10px
+  width 100%
+  text-align left
+  border none
+  background none
+  cursor pointer
+  font-size 14px
+  color #333
+  transition background 0.2s ease
+
+.edit
+  color #28a745
+
+.delete
+  color #748ca5
 </style>
