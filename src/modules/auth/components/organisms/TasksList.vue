@@ -278,6 +278,9 @@ input[type="checkbox"]
     align-items center
     width 100%
     justify-content space-between
+    button
+      span
+        font-weight 600
 
 .menu-close
   background none
@@ -291,7 +294,7 @@ input[type="checkbox"]
   font-weight bold
   color #2693ff
   transition color 0.2s ease
-
+  width 4px
   &:hover
     color #2693ff
 
@@ -315,4 +318,5 @@ button
 
 .delete
   color #748ca5
+  font-weight 600
 </style>

@@ -109,13 +109,15 @@ h2
   margin-bottom 42px
   &:disabled
     border none
-    background-color #ccc
-    color #666
+    background-color #a6c1d2
     cursor not-allowed
+    color #ffffff
   &:hover
     background-color darken(#1ad18f, 10%)
   &:hover:disabled
-    background-color #ccc
+    background-color #a6c1d2
+    cursor not-allowed
+    color #ffffff
 
 .loading-status
   display flex
