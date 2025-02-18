@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar">
+  <aside class="sidebar-menu">
     <div class="logo">
       <img src="@/assets/svg/logo.svg" alt="FacilitaTasks Logo" />
     </div>
@@ -58,7 +58,7 @@ const logout = () => {
 </script>
   
 <style lang="stylus" scoped>
-  .sidebar
+  .sidebar-menu
     width 106px
     background #2693FF
     color white

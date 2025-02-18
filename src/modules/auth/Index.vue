@@ -23,4 +23,6 @@ import Navbar from './components/molecules/Navbar.vue';
 .content
   flex 1
   background #E9F4FB
+  display flex
+  flex-direction column
 </style>
