@@ -15,17 +15,13 @@
         class="password-input"
       />
       <button class="login-button" type="submit" :disabled="loading">
-      <span v-if="!loading">
-        Entrar
-      </span>
-      <span v-else class="loading-status">
-        <span class="loading-component">
-          <Loading height="5px" width="5px"/>
+        <span v-if="!loading">Entrar</span>
+        <span v-else class="loading-status">
+          <span class="loading-component">
+            <Loading height="5px" width="5px"/>
+          </span>
+          <span>Carregando</span>
         </span>
-        <span>
-          Carregando
-        </span>
-      </span>
       </button>
       <router-link to="/forgot-password" class="forgot-password">Esqueci minha senha</router-link>
     </form>
@@ -48,8 +44,13 @@ const loading = ref(false);
 const toast = useToast();
 
 const doLogin = async () => {
+  if (!username.value || !password.value) {
+    toast("Preencha todos os campos!", "warning");
+    return;
+  }
+
   loading.value = true;
-  
+
   setTimeout(async () => {
     const credentials = {
       email: username.value,
@@ -57,91 +58,93 @@ const doLogin = async () => {
     };
 
     try {
-      const success = await store.dispatch('login', credentials);
+      const success = await store.dispatch('user/login', credentials);
+
       if (success) {
+        toast("Login realizado com sucesso!", "success");
         router.push({ path: '/account' });
       } else {
-        toast("Usuário/senha inválidos!", "error");
+        toast("Usuário ou senha inválidos!", "error");
       }
     } catch (error) {
       toast("Aconteceu um erro! Contate o suporte.", "error");
+      console.error("Erro no login:", error);
     } finally {
       loading.value = false;
     }
   }, 2000);
 };
 </script>
-  
-<style lang="stylus" scoped>
-  .login-box
-    display flex
-    flex-direction row
-    justify-content center
-    width 100%
-    form
-      display flex
-      flex-direction column
-      justify-content center
-      width 368px
-  h2
-    font-size 18px
-    margin-bottom 36px
-    font-weight bold
-    color #283848
-  .login-button
-    width 100%
-    background-color #1ad18f
-    color white
-    border none
-    height 55px
-    padding 10px
-    font-size 16px
-    font-weight 700
-    font-family 'Gilroy'
-    cursor pointer
-    border-radius 4px
-    margin-bottom 42px
-    &:disabled
-      border 1px solid #999999
-      background-color #ccc
-      color #666
-      border none
-      cursor not-allowed
-    &:hover
-      background-color darken(#1ad18f, 10%)
-    &:hover:disabled
-      background-color #ccc
-    .loading-status
-      display flex
-      justify-content center
-      .loading-component
-        margin-right 5px
-  .forgot-password
-    display block
-    text-align start
-    color #007bff
-    text-decoration underline
-    font-size 13px
-    &:hover
-      cursor pointer
-      font-weight bold
-  .user-input
-    margin-bottom 22px
-    width 100%
-    display flex
-  .password-input
-    margin-bottom 18px
-    display flex
-    width 100%
 
-  @media (max-width: 768px)
-    .login-box
+<style lang="stylus" scoped>
+.login-box
+  display flex
+  flex-direction row
+  justify-content center
+  width 100%
+  form
+    display flex
+    flex-direction column
+    justify-content center
+    width 368px
+
+h2
+  font-size 18px
+  margin-bottom 36px
+  font-weight bold
+  color #283848
+
+.login-button
+  width 100%
+  background-color #1ad18f
+  color white
+  border none
+  height 55px
+  padding 10px
+  font-size 16px
+  font-weight 700
+  font-family 'Gilroy'
+  cursor pointer
+  border-radius 4px
+  margin-bottom 42px
+  &:disabled
+    border 1px solid #999999
+    background-color #ccc
+    color #666
+    cursor not-allowed
+  &:hover
+    background-color darken(#1ad18f, 10%)
+  &:hover:disabled
+    background-color #ccc
+
+.loading-status
+  display flex
+  justify-content center
+  .loading-component
+    margin-right 5px
+
+.forgot-password
+  display block
+  text-align start
+  color #007bff
+  text-decoration underline
+  font-size 13px
+  &:hover
+    cursor pointer
+    font-weight bold
+
+.user-input, .password-input
+  margin-bottom 22px
+  width 100%
+  display flex
+
+@media (max-width: 768px)
+  .login-box
+    width 100%
+    flex 1
+    form
       width 100%
-      flex 1
-      form
-        width 100%
-        padding 20px
-        .forgot-password
-          font-size 15px
+      padding 20px
+      .forgot-password
+        font-size 15px
 </style>
-  

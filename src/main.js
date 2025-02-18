@@ -3,7 +3,7 @@ import './assets/styles/global.styl';
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import userStore from './store/user';
+import store from './store/index'; // Agora importa o `store/index.js`
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -16,5 +16,5 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 
 app.use(router)
 app.use(ToastPlugin)
-app.use(userStore)
+app.use(store)
 app.mount('#app');

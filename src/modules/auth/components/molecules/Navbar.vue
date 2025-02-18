@@ -51,7 +51,7 @@ const router = useRouter();
 const toast = useToast();
 
 const logout = () => {
-  store.dispatch('logout');
+  store.dispatch('user/logout');
   router.push({ name: 'LoginView' });
   toast("Logout feito com sucesso!", "success");
 };

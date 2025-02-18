@@ -1,12 +1,12 @@
-import { createStore } from 'vuex';
-
 // Função para carregar o estado do localStorage
 const loadState = () => {
   const storedState = localStorage.getItem('tasksStore');
+
   if (storedState) {
     return JSON.parse(storedState);
   }
-  return {
+
+  const initialState = {
     tasks: [
       { id: 1, title: 'Finalizar relatório', description: 'Finalizar o relatório de vendas do mês', tag: 'urgent', status: 'open' },
       { id: 2, title: 'Revisar código', description: 'Revisar código do novo módulo', tag: 'important', status: 'open' },
@@ -20,9 +20,14 @@ const loadState = () => {
       { id: 10, title: 'Correção de bugs', description: 'Corrigir bugs reportados no último sprint', tag: 'urgent', status: 'closed' }
     ]
   };
-};
 
-export default createStore({
+  // SALVA o estado inicial no localStorage caso não exista
+  localStorage.setItem('tasksStore', JSON.stringify(initialState));
+
+  return initialState;
+};
+export default {
+  namespaced: true, // Permite chamar as actions como 'tasks/addTask'
   state: loadState(),
   mutations: {
     ADD_TASK(state, task) {
@@ -52,4 +57,4 @@ export default createStore({
     importantTasks: state => state.tasks.filter(task => task.tag === 'important'),
     otherTasks: state => state.tasks.filter(task => task.tag === 'other')
   }
-});
+};

@@ -30,7 +30,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const user = computed(() => store.state.users.find(u => u.email === 'user@facilitaapp.com'));
+const user = computed(() => store.state.user?.users?.find(u => u.email === 'user@facilitaapp.com') || {});
 
 const userName = computed(() => user.value?.name || 'Usuário');
 const time = ref(new Date().toLocaleTimeString());

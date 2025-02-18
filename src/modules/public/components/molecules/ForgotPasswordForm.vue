@@ -32,7 +32,7 @@ const toast = useToast();
     };
   
     try {
-      const success = await store.dispatch('forgot', credentials);
+      const success = await store.dispatch('user/forgot', credentials);
       if (success) {
         toast("Um e-mail foi enviado para você!", "success");
         router.push({ path: '/' });

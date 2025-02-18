@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from '@/store/user'; // Importando o Vuex store
+import store from '@/modules/public/store/user'; // Importando o Vuex store
 import publicRoutes from '@/modules/public/index';
 import authRoutes from '@/modules/auth/index';
 

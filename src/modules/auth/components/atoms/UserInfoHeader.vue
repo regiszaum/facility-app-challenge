@@ -3,8 +3,8 @@
     <div class="user-info">
       <img src="@/assets/png/profile.png" alt="Usuário" class="avatar" />
       <div>
-        <p class="username">{{ userName }}</p>
-        <span class="role">{{ userRole }}</span>
+        <p class="username">{{ userName ? userName : 'Usuário' }}</p>
+        <span class="role">{{ userRole ? userRole : 'Sem função' }}</span>
       </div>
     </div>
   </header>
@@ -15,10 +15,12 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const user = computed(() => store.state.users.find(u => u.email === 'user@facilitaapp.com'));
 
-const userName = computed(() => user.value?.name || 'Usuário');
-const userRole = computed(() => user.value?.role_label || 'Sem função');
+// Verifica se o array `users` está carregado antes de acessar `.find()`
+const user = computed(() => store.state.user?.users?.find(u => u.email === 'user@facilitaapp.com') || {});
+
+const userName = computed(() => user.value.name || 'Usuário');
+const userRole = computed(() => user.value.role_label || 'Sem função');
 </script>
 
 <style lang="stylus" scoped>

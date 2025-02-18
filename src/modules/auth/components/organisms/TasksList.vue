@@ -19,19 +19,21 @@
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import SearchInput from '../molecules/SearchInput.vue';
+
 const store = useStore();
 const searchTerm = ref('');
 
-const tasks = computed(() => store.state.tasksStore?.tasks || []);
+// Agora estamos acessando corretamente as tarefas dentro do módulo `tasks`
+const tasks = computed(() => store.state.tasks?.tasks ?? []);
 
 const filteredTasks = computed(() => {
-  return tasks.value?.length > 0
+  return tasks.value.length > 0
     ? tasks.value.filter(task => task.title.toLowerCase().includes(searchTerm.value.toLowerCase()))
     : [];
 });
 
 const toggleTaskStatus = (taskId) => {
-  store.dispatch('toggleTaskStatus', taskId);
+  store.dispatch('tasks/toggleTaskStatus', taskId); // Usando o namespace correto
 };
 
 const formatTag = (tag) => {
