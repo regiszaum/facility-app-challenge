@@ -32,4 +32,8 @@ const openAddTaskModal = () => {
   cursor pointer
   &:hover
     background #28a745
+@media (max-width: 672px)
+  .floating-action-button
+    width 50px
+    height 50px
 </style>
