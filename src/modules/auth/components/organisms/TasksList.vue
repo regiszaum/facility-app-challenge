@@ -223,7 +223,7 @@ const formatTag = (tag) => {
 .task-title
   flex-grow 1
   font-size 16px
-  font-weight 600f
+  font-weight 600
   margin-left 10px
   color #283848
 
