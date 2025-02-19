@@ -11,7 +11,7 @@
       </p>
       
       <!-- Passamos a categoria selecionada como prop -->
-      <TasksList :selectedCategory="selectedCategory" />
+      <TasksList :selectedCategory="selectedCategory" @filterTasks="setCategoryFilter"/>
     </div>
   </div>
   <AddTaskButton />

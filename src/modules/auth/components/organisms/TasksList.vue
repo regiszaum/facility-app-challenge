@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useStore } from "vuex";
 import SearchInput from "../molecules/SearchInput.vue";
 import IconComponent from "@/components/atoms/IconComponent.vue";
@@ -102,6 +102,8 @@ const store = useStore();
 const searchTerm = ref("");
 const editTaskModalRef = ref(null);
 const deleteTaskModalRef = ref(null);
+const emit = defineEmits(["filterTasks"]); // 📢 Emissor de evento
+const tasks = computed(() => store.state.tasks?.tasks ?? []);
 
 // 📌 Fecha todos os menus ao clicar fora
 const closeAllMenus = () => {
@@ -139,7 +141,6 @@ const openDeleteTaskModal = (taskId, taskTitle) => {
 };
 
 // 📌 Obtém e ordena as tarefas
-const tasks = computed(() => store.state.tasks?.tasks ?? []);
 const filteredTasks = computed(() => {
   const priorityOrder = { urgent: 1, important: 2, other: 3 };
   let filtered = tasks.value.filter((task) =>
@@ -148,16 +149,20 @@ const filteredTasks = computed(() => {
     )
   );
 
-  // 🏷️ Aplica o filtro do select no mobile
-  if (selectedFilter.value !== "all") {
+  if (props.selectedCategory !== "all") {
     filtered = filtered.filter((task) =>
-      selectedFilter.value === "closed"
+      props.selectedCategory === "closed"
         ? task.status === "closed"
-        : task.tag === selectedFilter.value
+        : task.tag === props.selectedCategory
     );
   }
 
   return filtered.sort((a, b) => priorityOrder[a.tag] - priorityOrder[b.tag]);
+});
+
+// 🏷️ Quando o usuário selecionar uma opção no mobile, emite para o componente pai (Tasks.vue)
+watch(selectedFilter, (newVal) => {
+  emit("filterTasks", newVal);
 });
 
 // 📌 Alternar status
