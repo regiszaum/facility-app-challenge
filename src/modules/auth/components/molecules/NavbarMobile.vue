@@ -33,7 +33,13 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import IconComponent from "@/components/atoms/IconComponent.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { useToast } from "@/composables/useToast";
 
+const store = useStore();
+const router = useRouter();
+const toast = useToast();
 const menuOpen = ref(false);
 
 // Alterna a visibilidade do menu
@@ -57,9 +63,10 @@ onUnmounted(() => {
   document.removeEventListener("click", closeMenu);
 });
 
-// Simulação de logout
 const logout = () => {
-  alert("Logout efetuado!");
+  store.dispatch("user/logout");
+  router.push({ name: "LoginView" });
+  toast("Logout feito com sucesso!", "success");
 };
 </script>
 

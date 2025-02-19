@@ -2,6 +2,17 @@
   <div class="tasks-component" @click="closeAllMenus">
     <SearchInput class="search-component" v-model="searchTerm" />
 
+    <!-- 📱 Filtro mobile -->
+    <div class="mobile-filters">
+      <select v-model="selectedFilter">
+        <option value="all">Todas</option>
+        <option value="urgent">Urgentes</option>
+        <option value="important">Importantes</option>
+        <option value="other">Outras</option>
+        <option value="closed">Finalizadas</option>
+      </select>
+    </div>
+
     <div class="task-list">
       <div
         v-for="task in filteredTasks"
@@ -104,6 +115,9 @@ const handleClickOutside = (event) => {
   }
 };
 
+const selectedFilter = ref("all"); // 🌐 Filtro padrão (todas)
+
+
 // 📌 Escutando evento global de clique
 onMounted(() => {
   window.addEventListener("click", handleClickOutside);
@@ -134,13 +148,15 @@ const filteredTasks = computed(() => {
     )
   );
 
-  if (props.selectedCategory !== "all") {
+  // 🏷️ Aplica o filtro do select no mobile
+  if (selectedFilter.value !== "all") {
     filtered = filtered.filter((task) =>
-      props.selectedCategory === "closed"
+      selectedFilter.value === "closed"
         ? task.status === "closed"
-        : task.tag === props.selectedCategory
+        : task.tag === selectedFilter.value
     );
   }
+
   return filtered.sort((a, b) => priorityOrder[a.tag] - priorityOrder[b.tag]);
 });
 
@@ -331,4 +347,21 @@ button
 .delete
   color #748ca5
   font-weight 600
+
+.mobile-filters
+  display none
+  margin-bottom 20px
+  select
+    width 100%
+    padding 10px
+    border-radius 8px
+    border 1px solid #ddd
+    font-size 14px
+    color #283848
+    background-color white
+    box-shadow 0px 2px 4px rgba(0, 0, 0, 0.1)
+
+@media (max-width: 672px)
+  .mobile-filters
+    display block
 </style>
