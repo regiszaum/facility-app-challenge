@@ -217,16 +217,19 @@ input[type="checkbox"]
   align-items center
   justify-content center
   transition background 0.3s ease-in-out
+  position relative
 
   &:checked
     background-color #0ed984
     border-color #0ed984
     position relative
+
     &::after
-      content '✔'
-      font-size 12px
+      content '\f00c'                     // Código do ícone 'fa-check'
+      font-family "Font Awesome 6 Free"   // ✔ Nome exato da fonte
+      font-weight 900                     // ✔ Peso 900 para sólidos
+      font-size 16px
       color white
-      font-weight bold
       position absolute
       top 50%
       left 50%
