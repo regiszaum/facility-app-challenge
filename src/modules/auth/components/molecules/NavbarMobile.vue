@@ -8,22 +8,33 @@
     <div v-if="menuOpen" class="menu-dropdown">
       <ul>
         <li>
-          <a href="/account/dashboard"
-            ><IconComponent name="chart-column" height="20px" color="#2693FF" /> Dashboard</a
-          >
+          <router-link to="/account/dashboard" @click.native="closeOnNavigate">
+            <IconComponent name="chart-column" height="20px" color="#2693FF" />
+            Dashboard
+          </router-link>
         </li>
         <li>
-          <a href="/account/tasks"
-            ><IconComponent name="circle-check" :type="'far'" height="20px" color="#2693FF" /> Tarefas</a
-          >
+          <router-link to="/account/tasks" @click.native="closeOnNavigate">
+            <IconComponent
+              name="circle-check"
+              :type="'far'"
+              height="20px"
+              color="#2693FF"
+            />
+            Tarefas
+          </router-link>
         </li>
         <li>
-          <a href="/account/settings"
-            ><IconComponent name="gear" height="20px" color="#2693FF" /> Configurações</a
-          >
+          <router-link to="/account/settings" @click.native="closeOnNavigate">
+            <IconComponent name="gear" height="20px" color="#2693FF" />
+            Configurações
+          </router-link>
         </li>
         <li @click="logout">
-          <a href="#"><IconComponent name="right-from-bracket" height="20px" color="#2693FF" /> Sair</a>
+          <router-link to="#">
+            <IconComponent name="right-from-bracket" height="20px" color="#2693FF" />
+            Sair
+          </router-link>
         </li>
       </ul>
     </div>
@@ -42,31 +53,37 @@ const router = useRouter();
 const toast = useToast();
 const menuOpen = ref(false);
 
-// Alterna a visibilidade do menu
+// ✅ Alterna a visibilidade do menu
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value;
 };
 
-// Fecha o menu ao clicar fora
+// ✅ Fecha o menu ao clicar fora
 const closeMenu = (event) => {
   if (!event.target.closest(".menu-button") && !event.target.closest(".menu-dropdown")) {
     menuOpen.value = false;
   }
 };
 
-// Adiciona e remove o event listener para detectar cliques fora do menu
+// ✅ Fecha o menu ao navegar para uma rota
+const closeOnNavigate = () => {
+  menuOpen.value = false;
+};
+
+// ✅ Event listeners globais para clique fora do menu
 onMounted(() => {
   document.addEventListener("click", closeMenu);
 });
-
 onUnmounted(() => {
   document.removeEventListener("click", closeMenu);
 });
 
+// ✅ Logout e redirecionamento
 const logout = () => {
   store.dispatch("user/logout");
   router.push({ name: "LoginView" });
   toast("Logout feito com sucesso!", "success");
+  closeOnNavigate(); // Fecha o menu após logout
 };
 </script>
 
